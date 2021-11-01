@@ -1,5 +1,5 @@
 {
-  "name": "@zellkon/mat-select-search-advanced",
+  "name": "mat-select-search-advanced",
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",

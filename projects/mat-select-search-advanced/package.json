@@ -1,5 +1,5 @@
 {
-  "name": "mat-select-search-advanced",
+  "name": "@zellkon/mat-select-search-advanced",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^12.2.0",
