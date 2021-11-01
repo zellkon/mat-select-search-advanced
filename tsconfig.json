@@ -9,6 +9,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "paths": {
+      "mat-select-search-advanced": [
+        "dist/mat-select-search-advanced/mat-select-search-advanced",
+        "dist/mat-select-search-advanced"
+      ]
+    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,

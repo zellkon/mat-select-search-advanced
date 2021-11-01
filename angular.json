@@ -3,5 +3,37 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "mat-select-search-advanced": {
+      "projectType": "library",
+      "root": "projects/mat-select-search-advanced",
+      "sourceRoot": "projects/mat-select-search-advanced/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/mat-select-search-advanced/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mat-select-search-advanced/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mat-select-search-advanced/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mat-select-search-advanced/src/test.ts",
+            "tsConfig": "projects/mat-select-search-advanced/tsconfig.spec.json",
+            "karmaConfig": "projects/mat-select-search-advanced/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "mat-select-search-advanced"
 }
