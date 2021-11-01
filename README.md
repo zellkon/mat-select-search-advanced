@@ -11,7 +11,7 @@ _A This project made by the **[ZELLKON](https://zellkon.com)** team._
 
 ---
 
-Base on **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
+Use **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
 
 # [Project a demo](https://github.com/zellkon/mat-select-search-custom)
 
