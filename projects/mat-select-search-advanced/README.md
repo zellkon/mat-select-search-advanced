@@ -11,8 +11,6 @@ _A This project made by the **[ZELLKON](https://zellkon.com)** team._
 
 ---
 
-Use **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
-
 # [Project a demo](https://github.com/zellkon/mat-select-search-custom)
 
 <p align="center">
@@ -112,4 +110,4 @@ import { Observable, of } from 'rxjs';
   }
 ```
 
-##Same for other attributes
+## Same for other attributes
