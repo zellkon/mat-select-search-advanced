@@ -57,7 +57,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input() multiple = true;
   @Input() messageErrorRequired = 'Không được để trống';
   /** control for the MatSelect filter keyword multi-selection */
-  objectSelecteds!: any[];
+  objectSelecteds!: any;
   selectForm!: FormGroup;
   /** list of objects filtered by search keyword */
   public filteredObjectsMulti: ReplaySubject<TObject[]> = new ReplaySubject<TObject[]>(1);
@@ -147,9 +147,15 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
       (value) => {
         console.log(value);
         this.listSelected$.emit(value);
-        this.objects.pipe(map(o => o.filter((obj) => value.includes(obj[this.indexKey])))).subscribe(data => {
-          this.objectSelecteds = data.map(val => val[this.viewKey]);
-        });
+        if (this.multiple){
+          this.objects.pipe(map(o => o.filter((obj) => value.includes(obj[this.indexKey])))).subscribe(data => {
+            this.objectSelecteds = data.map( val => val[this.viewKey]);
+          });
+        } else {
+          this.objects.subscribe(data => {
+            this.objectSelecteds = data[value];
+          });
+        }
       }
     );
   }
