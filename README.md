@@ -69,7 +69,7 @@ export class AppModule { }
 ## Properties - Config Mat-select-search-advance
 ### objects (this is your Observable array)
 #### Convert array to Observable array
-```
+```js
 import { Observable, of } from 'rxjs';
   getObject(){
   return of(yourArray)
@@ -77,28 +77,28 @@ import { Observable, of } from 'rxjs';
 ```
 
 ### indexKey (this is your index your object, example: id)
-```
+```html
   indexKey="id" 
 ```
 ### viewKey (custom view value in mat-select)
-```
+```html
  viewKey="name"
 ```
 ### searchProperties (list key of object for search)
-```
+```html
  [searchProperties]="['name']"
 ```
 ##### or
-```
+```html
  [searchProperties]="['name','age',...]"
 ```
 ### placeholderSearchLabel (lable on search input)
-```
+```html
  placeholderSearchLabel="Search by name" 
 ```
 ### multiple (true or false)
-```
+```html
  [multiple]="false"
 ```
 
-
+##Same for other attributes
