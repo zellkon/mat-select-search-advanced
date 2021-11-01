@@ -66,6 +66,15 @@ export class AppModule { }
 **This code is just a sample**
 
 ## Properties - Config Mat-select-search-advance
-### objects
+### objects (this is your Observable array)
+#### Convert array to Observable array
+```html
+import { Observable, of } from 'rxjs';
+
+  getObject(){
+  return of(yourArray)
+}
+
+```
 
 
