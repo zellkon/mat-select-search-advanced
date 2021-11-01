@@ -13,7 +13,7 @@ _A This project made by the **[ZELLKON](https://zellkon.com)** team._
 
 Base on **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
 
-# [View a demo]
+# [Project a demo](https://github.com/zellkon/mat-select-search-custom)
 
 <p align="center">
 <img src="https://media.giphy.com/media/OgaVPvsW91Z2nR1lTX/giphy.gif">
