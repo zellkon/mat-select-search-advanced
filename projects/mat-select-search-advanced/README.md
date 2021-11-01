@@ -1,24 +1,115 @@
-# MatSelectSearchAdvanced
+<h1 align="center">MAT SELECT SEARCH ADVANCE</h1>
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.0.
+<p align="center">
 
-## Code scaffolding
+<img src="https://img.shields.io/badge/create%20by-zellkon-brightgreen" >
 
-Run `ng generate component component-name --project mat-select-search-advanced` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project mat-select-search-advanced`.
-> Note: Don't forget to add `--project mat-select-search-advanced` or else it will be added to the default project in your `angular.json` file. 
+<img src="https://img.shields.io/badge/version-0.0.3-orange">
+</p>
 
-## Build
+_A This project made by the **[ZELLKON](https://zellkon.com)** team._
 
-Run `ng build mat-select-search-advanced` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Publishing
+Use **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
 
-After building your library with `ng build mat-select-search-advanced`, go to the dist folder `cd dist/mat-select-search-advanced` and run `npm publish`.
+# [Project a demo](https://github.com/zellkon/mat-select-search-custom)
 
-## Running unit tests
+<p align="center">
+<img src="https://media.giphy.com/media/OgaVPvsW91Z2nR1lTX/giphy.gif">
+</p>
 
-Run `ng test mat-select-search-advanced` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## [NPM Package](https://www.npmjs.com/package/mat-select-search-advanced)
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# Installation
+
+`npm i mat-select-search-advanced`
+
+# How to use
+
+## Implement
+### Import MatSelectSearchAdvancedModule into your module
+```
+import { MatSelectSearchAdvancedModule } from 'mat-select-search-advanced';
+```
+### Add Module
+```
+@NgModule({
+  imports: [
+    ...
+    MatSelectSearchAdvancedModule
+  ],
+  declarations: [	
+    AppComponent,
+   ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+### Use library in your component
+```html
+<lib-mat-select-search-advanced 
+        [objects]="getObject()" indexKey="id" 
+        viewKey="name" 
+        [searchProperties]="['name']"
+        placeholderSearchLabel="Search by name" 
+        label="List Animal" 
+        messageErrorRequired="You need select some thing"
+        noEntriesFoundLabel="Found nothing" 
+        tooltipMessage="Select all / Deselect all" 
+        selectAllViewLabel="All animal"
+        (listSelected$)="getListSelected($event)">
+    </lib-mat-select-search-advanced>
+```
+
+**This code is just a sample**
+
+## Properties - Config Mat-select-search-advance
+### objects (this is your Observable array)
+#### Convert array to Observable array
+```js
+import { Observable, of } from 'rxjs';
+  getObject(){
+  return of(yourArray)
+}
+```
+
+### indexKey (this is your index your object, example: id)
+```html
+  indexKey="id" 
+```
+### viewKey (custom view value in mat-select)
+```html
+ viewKey="name"
+```
+### searchProperties (list key of object for search)
+```html
+ [searchProperties]="['name']"
+```
+##### or
+```html
+ [searchProperties]="['name','age',...]"
+```
+### placeholderSearchLabel (lable on search input)
+```html
+ placeholderSearchLabel="Search by name" 
+```
+### multiple (true or false)
+```html
+ [multiple]="false"
+```
+## listSelected$ (result)
+```html
+ (listSelected$)="getListSelected($event)"
+```
+### create function getListSelected in your component.ts
+```js
+ getListSelected(result: any){
+    console.log(result);
+  }
+```
+
+##Same for other attributes
