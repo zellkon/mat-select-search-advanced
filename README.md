@@ -15,12 +15,13 @@ Base on **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-s
 
 # [View a demo]
 
-
-## [NPM Package](https://www.npmjs.com/package/mat-select-search-advanced)
-
 <p align="center">
 <img src="https://media.giphy.com/media/OgaVPvsW91Z2nR1lTX/giphy.gif">
 </p>
+
+## [NPM Package](https://www.npmjs.com/package/mat-select-search-advanced)
+
+
 
 # Installation
 
@@ -70,11 +71,34 @@ export class AppModule { }
 #### Convert array to Observable array
 ```
 import { Observable, of } from 'rxjs';
-
   getObject(){
   return of(yourArray)
 }
+```
 
+### indexKey (this is your index your object, example: id)
+```
+  indexKey="id" 
+```
+### viewKey (custom view value in mat-select)
+```
+ viewKey="name"
+```
+### searchProperties (list key of object for search)
+```
+ [searchProperties]="['name']"
+```
+##### or
+```
+ [searchProperties]="['name','age',...]"
+```
+### placeholderSearchLabel (lable on search input)
+```
+ placeholderSearchLabel="Search by name" 
+```
+### multiple (true or false)
+```
+ [multiple]="false"
 ```
 
 
