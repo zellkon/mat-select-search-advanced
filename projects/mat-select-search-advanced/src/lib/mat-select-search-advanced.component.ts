@@ -25,7 +25,7 @@ import { map, take, takeUntil } from 'rxjs/operators';
               {{obj[viewKey]}}
           </span>
   </mat-option>
-  <mat-select-trigger>
+  <mat-select-trigger *ngIf="multiple === true">
       {{isAllSelected ? selectAllViewLabel : objectSelecteds}}
   </mat-select-trigger>
   </mat-select>
