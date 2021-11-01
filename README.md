@@ -60,7 +60,8 @@ export class AppModule { }
         messageErrorRequired="You need select some thing"
         noEntriesFoundLabel="Found nothing" 
         tooltipMessage="Select all / Deselect all" 
-        selectAllViewLabel="All animal">
+        selectAllViewLabel="All animal"
+        (listSelected$)="getListSelected($event)">
     </lib-mat-select-search-advanced>
 ```
 
@@ -99,6 +100,16 @@ import { Observable, of } from 'rxjs';
 ### multiple (true or false)
 ```html
  [multiple]="false"
+```
+## listSelected$ (result)
+```html
+ (listSelected$)="getListSelected($event)"
+```
+### create function getListSelected in your component.ts
+```js
+ getListSelected(result: any){
+    console.log(result);
+  }
 ```
 
 ##Same for other attributes
