@@ -112,4 +112,4 @@ import { Observable, of } from 'rxjs';
   }
 ```
 
-##Same for other attributes
+## Same for other attributes
