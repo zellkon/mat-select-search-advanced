@@ -21,11 +21,11 @@ import { map, take, takeUntil } from 'rxjs/operators';
           [placeholderLabel]="placeholderSearchLabel" [noEntriesFoundLabel]="noEntriesFoundLabel"></ngx-mat-select-search>
   </mat-option>
   <mat-option *ngFor="let obj of filteredObjectsMulti | async;" [value]="obj[indexKey]">
-        <span *ngFor="let key of viewKey; let i= index;">
+        <span *ngFor="let key of viewKey; let i = index;">
             {{obj[key]}}
-            <span *ngIf="(i%2===0)"> - </span>
+            <span *ngIf="i >= 0 && i !== viewKey.length - 1"> - </span>
         </span>
-          <mat-divider></mat-divider>
+        <mat-divider></mat-divider> 
   </mat-option>
   <mat-select-trigger *ngIf="multiple === true">
       {{isAllSelected ? selectAllViewLabel : objectSelecteds}}
@@ -228,6 +228,6 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
         return this.messageErrorRequired;
       }
     }
-    return '';
+    return 'something error !';
   }
 }
