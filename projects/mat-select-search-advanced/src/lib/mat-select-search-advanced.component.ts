@@ -44,6 +44,8 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input()
   objects!: Observable<TObject[]>;
   @Input()
+  initObjects!: Observable<TObject[]>;
+  @Input()
   searchProperties: (keyof TObject)[] = [];
   @Input()
   indexKey!: keyof TObject;
@@ -66,6 +68,9 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   multiSelect!: MatSelect;
 
   @Output() listSelected$ = new EventEmitter();
+
+  /** Output emitter to send to parent component with the toggle all boolean */
+  @Output() toggleAll = new EventEmitter<boolean>();
   /** Subject that emits when the component has been destroyed. */
   // tslint:disable-next-line:variable-name
   protected _onDestroy = new Subject<void>();
@@ -102,9 +107,11 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
         // console.log(val);
         if (selectAllValue) {
           this.isAllSelected = true;
+          this.toggleAll.emit(true);
           this.selectForm.controls.objectFormControl.patchValue(val.map(obj => obj[this.indexKey]));
         } else {
           this.isAllSelected = false;
+          this.toggleAll.emit(false);
           this.selectForm.controls.objectFormControl.patchValue([]);
         }
       });
@@ -129,7 +136,11 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
     // filter the objects with code
     this.objects.pipe(map(o => o.filter(object => String(object[this.searchProperties[0]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[1]]).toLowerCase().indexOf(search) > -1
-      || String(object[this.searchProperties[2]]).toLowerCase().indexOf(search) > -1)))
+      || String(object[this.searchProperties[2]]).toLowerCase().indexOf(search) > -1
+      || String(object[this.searchProperties[3]]).toLowerCase().indexOf(search) > -1
+      || String(object[this.searchProperties[4]]).toLowerCase().indexOf(search) > -1
+      || String(object[this.searchProperties[5]]).toLowerCase().indexOf(search) > -1
+      )))
       .subscribe(data => {
         this.filteredObjectsMulti.next(data.slice());
       });
@@ -188,6 +199,8 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
 
   // tslint:disable-next-line:typedef
   initSelect() {
+    // set initial selection
+    this.selectForm.controls.objectMultiFilterCtrl.setValue(this.initObjects);
     // load the initial object list
     this.objects.subscribe(data => {
       this.filteredObjectsMulti.next(data.slice());
