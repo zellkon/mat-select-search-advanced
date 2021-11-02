@@ -99,7 +99,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   toggleSelectAll(selectAllValue: boolean) {
     this.filteredObjectsMulti.pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(val => {
-        console.log(val);
+        // console.log(val);
         if (selectAllValue) {
           this.isAllSelected = true;
           this.selectForm.controls.objectFormControl.patchValue(val.map(obj => obj[this.indexKey]));
@@ -146,7 +146,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
     // for show Selected value text
     this.selectForm.controls.objectFormControl.valueChanges.subscribe(
       (value) => {
-        console.log(value);
+        // console.log(value);
         this.listSelected$.emit(value);
         if (this.multiple){
           this.objects.pipe(map(o => o.filter((obj) => value.includes(obj[this.indexKey])))).subscribe(data => {
@@ -163,8 +163,8 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
 
   // tslint:disable-next-line:typedef
   compareSelectedAndInitial(selectedArray: any, initalArray: any) {
-    console.log(selectedArray);
-    console.log(initalArray);
+    // console.log(selectedArray);
+    // console.log(initalArray);
     if (selectedArray && initalArray) {
       if (selectedArray?.length !== initalArray?.length) {
         this.isAllSelected = false;
