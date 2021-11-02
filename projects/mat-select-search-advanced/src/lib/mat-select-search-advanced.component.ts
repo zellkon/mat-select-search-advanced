@@ -44,7 +44,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input()
   objects!: Observable<TObject[]>;
   @Input()
-  initObjects!: any;
+  initData!: any;
   @Input()
   searchProperties: (keyof TObject)[] = [];
   @Input()
@@ -86,8 +86,8 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
       objectMultiFilterCtrl: [],
     });
     // set initial selection
-    this.selectForm.controls.objectFormControl.setValue(this.initObjects);
-    this.makePreviewValue(this.initObjects);
+    this.selectForm.controls.objectFormControl.setValue(this.initData);
+    this.makePreviewValue(this.initData);
     this.initSelect();
   }
 
