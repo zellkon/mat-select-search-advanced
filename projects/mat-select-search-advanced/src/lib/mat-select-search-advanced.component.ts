@@ -159,7 +159,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   makePreviewValue(listId: any) {
     // for show Selected value text
     if (this.multiple) {
-      this.objects.pipe(map(o => o.filter((obj) => listId.includes(obj[this.indexKey])))).subscribe(data => {
+      this.objects.pipe(map(o => o.filter((obj) => listId?.includes(obj[this.indexKey])))).subscribe(data => {
         this.objectSelecteds = data.map(val => val[this.viewKey]);
       });
     } else {
