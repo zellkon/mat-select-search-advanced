@@ -51,7 +51,7 @@ export class AppModule { }
 ```html
 <lib-mat-select-search-advanced 
         [objects]="getObject()" indexKey="id" 
-        viewKey="name" 
+        [viewKey]="['name']" 
         [searchProperties]="['name']"
         placeholderSearchLabel="Search by name" 
         label="List Animal" 
@@ -81,7 +81,7 @@ import { Observable, of } from 'rxjs';
 ```
 ### viewKey (custom view value in mat-select)
 ```html
- viewKey="name"
+ [viewKey]="['name', 'age']"
 ```
 ### searchProperties (list key of object for search)
 ```html

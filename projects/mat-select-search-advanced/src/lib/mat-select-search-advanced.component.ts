@@ -21,9 +21,10 @@ import { map, take, takeUntil } from 'rxjs/operators';
           [placeholderLabel]="placeholderSearchLabel" [noEntriesFoundLabel]="noEntriesFoundLabel"></ngx-mat-select-search>
   </mat-option>
   <mat-option *ngFor="let obj of filteredObjectsMulti | async;" [value]="obj[indexKey]">
-          <span>
-              {{obj[viewKey]}}
-          </span>
+        <span *ngFor="let key of viewKey; let i= index;">
+            {{obj[key]}}
+            <span *ngIf="(i%2===0)"> - </span>
+        </span>
           <mat-divider></mat-divider>
   </mat-option>
   <mat-select-trigger *ngIf="multiple === true">
@@ -50,7 +51,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input()
   indexKey!: keyof TObject;
   @Input()
-  viewKey!: keyof TObject;
+  viewKey!: (keyof TObject)[];
   @Input() tooltipMessage = 'Chọn tất cả / Bỏ chọn tất cả';
   @Input() placeholderSearchLabel = 'Tìm kiếm';
   @Input() noEntriesFoundLabel = 'Không tìm thấy kết quả nào';
@@ -160,7 +161,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
     // for show Selected value text
     if (this.multiple) {
       this.objects.pipe(map(o => o.filter((obj) => listId?.includes(obj[this.indexKey])))).subscribe(data => {
-        this.objectSelecteds = data.map(val => val[this.viewKey]);
+        this.objectSelecteds = data.map(val => val[this.viewKey[0]]);
       });
     } else {
       this.objects.subscribe(data => {
