@@ -87,6 +87,10 @@ import { Observable, of } from 'rxjs';
 ```html
  [searchProperties]="['name']"
 ```
+### showToggleAllCheckbox (true or false)
+```html
+  [showToggleAllCheckbox]="true"
+```
 ##### or
 ```html
  [searchProperties]="['name','age',...]"
@@ -94,6 +98,14 @@ import { Observable, of } from 'rxjs';
 ### placeholderSearchLabel (lable on search input)
 ```html
  placeholderSearchLabel="Search by name" 
+```
+### initData (init data in edit mode, example: listId=[1,2,3] || id = 1)
+```html
+ [initData]="listId" 
+```
+##### or
+```html
+ [initData]="1" 
 ```
 ### multiple (true or false)
 ```html
@@ -106,6 +118,12 @@ import { Observable, of } from 'rxjs';
 ### create function getListSelected in your component.ts
 ```js
  getListSelected(result: any){
+    console.log(result);
+  }
+```
+### create function toggleAll in your component.ts
+```js
+ getToggleAll(result){
     console.log(result);
   }
 ```
