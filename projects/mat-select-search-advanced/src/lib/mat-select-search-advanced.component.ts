@@ -44,7 +44,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input()
   objects!: Observable<TObject[]>;
   @Input()
-  initObjects!: Observable<TObject[]>;
+  initObjects!: any;
   @Input()
   searchProperties: (keyof TObject)[] = [];
   @Input()
@@ -85,6 +85,9 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
       objectFormControl: ['', [Validators.required]],
       objectMultiFilterCtrl: [],
     });
+    // set initial selection
+    this.selectForm.controls.objectFormControl.setValue(this.initObjects);
+    this.makePreviewValue(this.initObjects);
     this.initSelect();
   }
 
@@ -140,7 +143,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
       || String(object[this.searchProperties[3]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[4]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[5]]).toLowerCase().indexOf(search) > -1
-      )))
+    )))
       .subscribe(data => {
         this.filteredObjectsMulti.next(data.slice());
       });
@@ -153,23 +156,17 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   }
 
   // tslint:disable-next-line:typedef
-  makePreviewValue() {
+  makePreviewValue(listId: any) {
     // for show Selected value text
-    this.selectForm.controls.objectFormControl.valueChanges.subscribe(
-      (value) => {
-        // console.log(value);
-        this.listSelected$.emit(value);
-        if (this.multiple){
-          this.objects.pipe(map(o => o.filter((obj) => value.includes(obj[this.indexKey])))).subscribe(data => {
-            this.objectSelecteds = data.map( val => val[this.viewKey]);
-          });
-        } else {
-          this.objects.subscribe(data => {
-            this.objectSelecteds = data[value];
-          });
-        }
-      }
-    );
+    if (this.multiple) {
+      this.objects.pipe(map(o => o.filter((obj) => listId.includes(obj[this.indexKey])))).subscribe(data => {
+        this.objectSelecteds = data.map(val => val[this.viewKey]);
+      });
+    } else {
+      this.objects.subscribe(data => {
+        this.objectSelecteds = data[listId];
+      });
+    }
   }
 
   // tslint:disable-next-line:typedef
@@ -199,8 +196,6 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
 
   // tslint:disable-next-line:typedef
   initSelect() {
-    // set initial selection
-    this.selectForm.controls.objectMultiFilterCtrl.setValue(this.initObjects);
     // load the initial object list
     this.objects.subscribe(data => {
       this.filteredObjectsMulti.next(data.slice());
@@ -215,7 +210,12 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
         }
         this.filterObjectsMulti();
       });
-    this.makePreviewValue();
+    this.selectForm.controls.objectFormControl.valueChanges.subscribe(
+      (value) => {
+        this.listSelected$.emit(value);
+        this.makePreviewValue(value);
+      }
+    );
   }
   // End Select with search and select all ****************************************************************************
 
