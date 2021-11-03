@@ -13,7 +13,7 @@ import { map, take, takeUntil } from 'rxjs/operators';
           {{label}}
       </mat-label>
       <mat-select formControlName="objectFormControl" [multiple]="multiple" #multiSelect
-  (selectionChange)="selectionChange()" (openedChange)="openedChange()" [disabled]="disabled">
+  (selectionChange)="selectionChange()" (openedChange)="openedChange()">
   <mat-option>
       <ngx-mat-select-search [showToggleAllCheckbox]="showToggleAllCheckbox" (toggleAll)="toggleSelectAll($event)"
           formControlName="objectMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
@@ -45,7 +45,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input()
   objects!: Observable<TObject[]>;
   @Input()
-  initData!: any;
+  initData!: Observable<any>;
   @Input()
   searchProperties: (keyof TObject)[] = [];
   @Input()
@@ -60,6 +60,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input() showToggleAllCheckbox = true;
   @Input() disabled = false;
   @Input() multiple = true;
+  @Input() required = true;
   @Input() messageErrorRequired = 'Không được để trống';
   /** control for the MatSelect filter keyword multi-selection */
   objectSelecteds!: any;
@@ -84,12 +85,21 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
 
   ngOnInit(): void {
     this.selectForm = this.fb.group({
-      objectFormControl: ['', [Validators.required]],
+      objectFormControl: [{value: '', disabled: this.disabled}],
       objectMultiFilterCtrl: [],
     });
+    if (this.required){
+      this.selectForm.controls.objectFormControl.setValidators(Validators.required);
+      this.selectForm.controls.objectFormControl.updateValueAndValidity();
+    } else {
+      this.selectForm.controls.objectFormControl.setValidators(null);
+      this.selectForm.controls.objectFormControl.updateValueAndValidity();
+    }
     // set initial selection
-    this.selectForm.controls.objectFormControl.setValue(this.initData);
-    this.makePreviewValue(this.initData);
+    this.initData.subscribe(value => {
+      this.selectForm.controls.objectFormControl.setValue(value);
+      this.makePreviewValue(value);
+    });
     this.initSelect();
   }
 
