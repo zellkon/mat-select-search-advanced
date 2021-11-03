@@ -4,22 +4,21 @@
 
 <img src="https://img.shields.io/badge/create%20by-zellkon-brightgreen" >
 
-<img src="https://img.shields.io/badge/version-0.0.3-orange">
+<img src="https://img.shields.io/badge/version-0.1.7-blue">
 </p>
 
-_A This project made by the **[ZELLKON](https://zellkon.com)** team._
+_A This project made by the **[ZELLKON](https://zellkon.com)**._
 
 ---
 
-Use **[ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)**.
-
-# [Project a demo](https://github.com/zellkon/mat-select-search-custom)
+# [Github](https://github.com/zellkon/mat-select-search-advanced)
 
 <p align="center">
 <img src="https://media.giphy.com/media/OgaVPvsW91Z2nR1lTX/giphy.gif">
 </p>
 
 ## [NPM Package](https://www.npmjs.com/package/mat-select-search-advanced)
+## [Base ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)
 
 
 
@@ -53,8 +52,9 @@ export class AppModule { }
 ```html
 <lib-mat-select-search-advanced 
         [objects]="getObject()" indexKey="id" 
-        viewKey="name" 
-        [searchProperties]="['name']"
+        [viewKey]="['name']" 
+        [searchProperties]="['name', 'age']"
+        [initData] = "listId"
         placeholderSearchLabel="Search by name" 
         label="List Animal" 
         messageErrorRequired="You need select some thing"
@@ -76,6 +76,14 @@ import { Observable, of } from 'rxjs';
   return of(yourArray)
 }
 ```
+#### Accept Subject and RelaySubject or BehaviorSubject
+```js
+// if you need change value realtime just use Subject
+observableArray: Subject<any[]> = new ReplaySubject<any[]>(1);
+
+// change value observableArray
+observableArray.next(newData);
+```
 
 ### indexKey (this is your index your object, example: id)
 ```html
@@ -83,11 +91,15 @@ import { Observable, of } from 'rxjs';
 ```
 ### viewKey (custom view value in mat-select)
 ```html
- viewKey="name"
+ [viewKey]="['name', 'age']"
 ```
 ### searchProperties (list key of object for search)
 ```html
  [searchProperties]="['name']"
+```
+### showToggleAllCheckbox (true or false)
+```html
+  [showToggleAllCheckbox]="true"
 ```
 ##### or
 ```html
@@ -97,9 +109,21 @@ import { Observable, of } from 'rxjs';
 ```html
  placeholderSearchLabel="Search by name" 
 ```
+### initData (init data in edit mode, example: listId=[1,2,3] || id = 1)
+```html
+ [initData]="listId" 
+```
+##### or
+```html
+ [initData]="1" 
+```
 ### multiple (true or false)
 ```html
  [multiple]="false"
+```
+### disabled (true or false)
+```html
+ [disabled]="false"
 ```
 ## listSelected$ (result)
 ```html
@@ -108,6 +132,12 @@ import { Observable, of } from 'rxjs';
 ### create function getListSelected in your component.ts
 ```js
  getListSelected(result: any){
+    console.log(result);
+  }
+```
+### create function toggleAll in your component.ts
+```js
+ getToggleAll(result){
     console.log(result);
   }
 ```
