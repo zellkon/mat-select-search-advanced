@@ -109,7 +109,7 @@ observableArray.next(newData);
 ```html
  placeholderSearchLabel="Search by name" 
 ```
-### initData (init data in edit mode, example: listId=[1,2,3] || id = 1)
+### initData (init data in edit mode, example: Observable value)
 ```html
  [initData]="listId" 
 ```
