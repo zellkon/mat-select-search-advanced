@@ -13,7 +13,7 @@ import { map, take, takeUntil } from 'rxjs/operators';
           {{label}}
       </mat-label>
       <mat-select formControlName="objectFormControl" [multiple]="multiple" #multiSelect
-  (selectionChange)="selectionChange()" (openedChange)="openedChange()">
+  (selectionChange)="selectionChange()" (openedChange)="openedChange()" [disabled]="disabled">
   <mat-option>
       <ngx-mat-select-search [showToggleAllCheckbox]="showToggleAllCheckbox" (toggleAll)="toggleSelectAll($event)"
           formControlName="objectMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
@@ -58,6 +58,7 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input() label = 'Lựa chọn';
   @Input() selectAllViewLabel = 'Tất cả';
   @Input() showToggleAllCheckbox = true;
+  @Input() disabled = false;
   @Input() multiple = true;
   @Input() messageErrorRequired = 'Không được để trống';
   /** control for the MatSelect filter keyword multi-selection */
