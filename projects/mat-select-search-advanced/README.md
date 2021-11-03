@@ -4,7 +4,7 @@
 
 <img src="https://img.shields.io/badge/create%20by-zellkon-brightgreen" >
 
-<img src="https://img.shields.io/badge/version-0.0.3-orange">
+<img src="https://img.shields.io/badge/version-0.1.7-blue">
 </p>
 
 _A This project made by the **[ZELLKON](https://zellkon.com)**._
