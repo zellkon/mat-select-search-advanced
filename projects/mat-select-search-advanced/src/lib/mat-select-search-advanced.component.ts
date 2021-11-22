@@ -1,26 +1,27 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'lib-mat-select-search-advanced',
+  selector: 'mat-select-search-advanced',
   template: `
-  <div [formGroup]="selectForm" >
-  <mat-form-field appearance="outline" style="width: 100%;">
+  <div>
+  <mat-form-field [appearance]="appearance" style="width: 100%;">
       <mat-label>
-          {{label}}
+          {{label}}<span *ngIf="required" style="color: red;">*</span>
       </mat-label>
-      <mat-select formControlName="objectFormControl" [multiple]="multiple" #multiSelect
+      <mat-select [formControl]="objectFormControl" [multiple]="multiple" #multiSelect
   (selectionChange)="selectionChange()" (openedChange)="openedChange()">
   <mat-option>
       <ngx-mat-select-search [showToggleAllCheckbox]="showToggleAllCheckbox" (toggleAll)="toggleSelectAll($event)"
-          formControlName="objectMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
+          [formControl]="objectMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
           [toogleAllCheckboxTooltipPosition]="'above'" [toggleAllCheckboxChecked]="isAllSelected"
           [placeholderLabel]="placeholderSearchLabel" [noEntriesFoundLabel]="noEntriesFoundLabel"></ngx-mat-select-search>
   </mat-option>
-  <mat-option *ngFor="let obj of filteredObjectsMulti | async;" [value]="obj[indexKey]">
+  <mat-option *ngFor="let obj of filteredObjectsMulti | async;" [value]="obj[indexKey]" (click)="selectOption(obj[indexKey])">
         <span *ngFor="let key of viewKey; let i = index;">
             {{obj[key]}}
             <span *ngIf="i >= 0 && i !== viewKey.length - 1"> - </span>
@@ -39,13 +40,13 @@ import { map, take, takeUntil } from 'rxjs/operators';
   styles: [
   ]
 })
-export class MatSelectSearchAdvancedComponent<TObject extends object> implements OnInit, AfterViewInit, OnDestroy {
-  // Start define variable for mat-select-search***************************************************************
+export class MatSelectSearchAdvancedComponent<TObject extends object> implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+ // Start define variable for mat-select-search***************************************************************
   /** list of objects */
   @Input()
-  objects!: Observable<TObject[]>;
+  objects!: TObject[];
   @Input()
-  initData!: Observable<any>;
+  initData!: any;
   @Input()
   searchProperties: (keyof TObject)[] = [];
   @Input()
@@ -55,136 +56,126 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
   @Input() tooltipMessage = 'Chọn tất cả / Bỏ chọn tất cả';
   @Input() placeholderSearchLabel = 'Tìm kiếm';
   @Input() noEntriesFoundLabel = 'Không tìm thấy kết quả nào';
-  @Input() label = 'Lựa chọn';
+  @Input() label = '';
   @Input() selectAllViewLabel = 'Tất cả';
   @Input() showToggleAllCheckbox = true;
-  @Input() disabled = false;
   @Input() multiple = true;
-  @Input() required = true;
+  @Input() disabled = false;
   @Input() messageErrorRequired = 'Không được để trống';
+  @Input() appearance: MatFormFieldAppearance = 'fill';
+  @Input() required = true;
   /** control for the MatSelect filter keyword multi-selection */
   objectSelecteds!: any;
-  selectForm!: FormGroup;
+  objectFormControl: FormControl = new FormControl({value:'', disabled: this.disabled}, [Validators.required]);
+  objectMultiFilterCtrl: FormControl = new FormControl();
   /** list of objects filtered by search keyword */
   public filteredObjectsMulti: ReplaySubject<TObject[]> = new ReplaySubject<TObject[]>(1);
   @ViewChild('multiSelect', { static: true })
   multiSelect!: MatSelect;
 
-  @Output() listSelected$ = new EventEmitter();
-
-  /** Output emitter to send to parent component with the toggle all boolean */
-  @Output() toggleAll = new EventEmitter<boolean>();
+  @Output() listSelected$ = new EventEmitter<any>();
+  @Output() optionSelected$ = new EventEmitter<any>();
   /** Subject that emits when the component has been destroyed. */
-  // tslint:disable-next-line:variable-name
   protected _onDestroy = new Subject<void>();
   isAllSelected = false;
   // End define variable for mat-select-search*****************************************************************
-  constructor(
-    private fb: FormBuilder,
-  ) { }
+  constructor() { }
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('objects' in changes){
+      const objects = changes['objects'].currentValue;
+      this.objects = objects;
+      this.filteredObjectsMulti.next(this.objects.slice());
+      this.objectFormControl.patchValue(this.initData);
+    }
+    if ('initData' in changes){
+      const initData = changes['initData'].currentValue;
+      this.initData = initData;
+      this.objectSelecteds = this.initData;
+      this.objectFormControl.patchValue(this.initData);
+      // this.makePreviewValue(this.initData);
+    }
+    if ('required' in changes){
+      const required = changes['required'].currentValue;
+      if (required){
+        this.objectFormControl.setValidators(Validators.required);
+        this.objectFormControl.reset();
+      } else {
+        this.objectFormControl.removeValidators(Validators.required);
+        this.objectFormControl.reset();
+      }
+    }
+  }
 
   ngOnInit(): void {
-    this.selectForm = this.fb.group({
-      objectFormControl: [{value: '', disabled: this.disabled}],
-      objectMultiFilterCtrl: [],
-    });
-    if (this.required){
-      this.selectForm.controls.objectFormControl.setValidators(Validators.required);
-      this.selectForm.controls.objectFormControl.updateValueAndValidity();
-    } else {
-      this.selectForm.controls.objectFormControl.setValidators(null);
-      this.selectForm.controls.objectFormControl.updateValueAndValidity();
-    }
-    // set initial selection
-    this.initData.subscribe(value => {
-      this.selectForm.controls.objectFormControl.setValue(value);
-      this.makePreviewValue(value);
-    });
+
+     // set initial selection
+    this.objectFormControl.patchValue(this.initData);
+    this.makePreviewValue(this.initData);
     this.initSelect();
   }
 
   // Select with search and select all ****************************************************************************
 
-  // tslint:disable-next-line:typedef
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
   }
 
-  // tslint:disable-next-line:typedef
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
 
-  // tslint:disable-next-line:typedef
-  toggleSelectAll(selectAllValue: boolean) {
+  toggleSelectAll(selectAllValue: boolean): void {
     this.filteredObjectsMulti.pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(val => {
         // console.log(val);
         if (selectAllValue) {
           this.isAllSelected = true;
-          this.toggleAll.emit(true);
-          this.selectForm.controls.objectFormControl.patchValue(val.map(obj => obj[this.indexKey]));
+          this.objectFormControl.patchValue(val.map(obj => obj[this.indexKey]));
         } else {
           this.isAllSelected = false;
-          this.toggleAll.emit(false);
-          this.selectForm.controls.objectFormControl.patchValue([]);
+          this.objectFormControl.patchValue([]);
         }
       });
   }
 
-  // tslint:disable-next-line:typedef
-  protected filterObjectsMulti() {
+  protected filterObjectsMulti(): void {
     if (!this.objects) {
       return;
     }
     // get the search keyword
-    let search = this.selectForm.controls.objectMultiFilterCtrl.value;
+    let search = this.objectMultiFilterCtrl.value;
     if (!search) {
-      this.objects.subscribe(data => {
-        this.filteredObjectsMulti.next(data.slice());
-      });
-      // this.filteredObjectsMulti.next(this.objects.slice());
+      this.filteredObjectsMulti.next(this.objects.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the objects with code
-    this.objects.pipe(map(o => o.filter(object => String(object[this.searchProperties[0]]).toLowerCase().indexOf(search) > -1
+    this.filteredObjectsMulti.next(
+      this.objects.filter(object => String(object[this.searchProperties[0]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[1]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[2]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[3]]).toLowerCase().indexOf(search) > -1
       || String(object[this.searchProperties[4]]).toLowerCase().indexOf(search) > -1
-      || String(object[this.searchProperties[5]]).toLowerCase().indexOf(search) > -1
-    )))
-      .subscribe(data => {
-        this.filteredObjectsMulti.next(data.slice());
-      });
+      )
+      );
   }
 
-  // tslint:disable-next-line:typedef
   clearAllSelected() {
     this.isAllSelected = false;
-    this.selectForm.controls.objectFormControl.setValue([]);
+    this.objectFormControl.patchValue([]);
   }
 
-  // tslint:disable-next-line:typedef
-  makePreviewValue(listId: any) {
+  makePreviewValue(listId: any): void {
     // for show Selected value text
-    if (this.multiple) {
-      this.objects.pipe(map(o => o.filter((obj) => listId?.includes(obj[this.indexKey])))).subscribe(data => {
-        this.objectSelecteds = data.map(val => val[this.viewKey[0]]);
-      });
+    if (this.multiple){
+      this.objectSelecteds = this.objects.filter((obj) => listId?.includes(obj[this.indexKey])).map( val => val[this.viewKey[0]]);
     } else {
-      this.objects.subscribe(data => {
-        this.objectSelecteds = data[listId];
-      });
+      this.objectSelecteds = this.objects[listId];
     }
   }
 
-  // tslint:disable-next-line:typedef
-  compareSelectedAndInitial(selectedArray: any, initalArray: any) {
-    // console.log(selectedArray);
-    // console.log(initalArray);
+  compareSelectedAndInitial(selectedArray: any, initalArray: any): void {
     if (selectedArray && initalArray) {
       if (selectedArray?.length !== initalArray?.length) {
         this.isAllSelected = false;
@@ -194,27 +185,22 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
       }
     }
   }
-  // tslint:disable-next-line:typedef
-  selectionChange() {
-    this.objects.subscribe(data => {
-      this.compareSelectedAndInitial(this.selectForm.controls.objectFormControl.value, data);
-    });
+  selectionChange(): void {
+    this.compareSelectedAndInitial(this.objectFormControl.value, this.objects);
   }
 
-  // tslint:disable-next-line:typedef
-  openedChange() {
+  openedChange(): void {
     this.selectionChange();
   }
+  selectOption(data: any){
+    this.optionSelected$.emit(data);
+  }
 
-  // tslint:disable-next-line:typedef
-  initSelect() {
+  initSelect(): void {
     // load the initial object list
-    this.objects.subscribe(data => {
-      this.filteredObjectsMulti.next(data.slice());
-    });
-
+    this.filteredObjectsMulti.next(this.objects.slice());
     // listen for search field value changes
-    this.selectForm.controls.objectMultiFilterCtrl.valueChanges
+    this.objectMultiFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe((value) => {
         if (value) {
@@ -222,23 +208,24 @@ export class MatSelectSearchAdvancedComponent<TObject extends object> implements
         }
         this.filterObjectsMulti();
       });
-    this.selectForm.controls.objectFormControl.valueChanges.subscribe(
-      (value) => {
-        this.listSelected$.emit(value);
-        this.makePreviewValue(value);
-      }
-    );
+    
+     this.objectFormControl.valueChanges.subscribe(
+        (value) => {
+          this.listSelected$.emit(value);
+          this.makePreviewValue(value);
+        }
+      );
   }
   // End Select with search and select all ****************************************************************************
 
   catchErrorMessage(controlName?: any): string {
-    const controls = this.selectForm.controls;
+    const controls = this;
     if (controlName === 'objectFormControl') {
       const errors = controls.objectFormControl.errors;
       if (errors?.required) {
         return this.messageErrorRequired;
       }
     }
-    return 'something error !';
+    return '';
   }
 }

@@ -50,7 +50,7 @@ export class AppModule { }
 ```
 ### Use library in your component
 ```html
-<lib-mat-select-search-advanced 
+<mat-select-search-advanced 
         [objects]="getObject()" indexKey="id" 
         [viewKey]="['name']" 
         [searchProperties]="['name', 'age']"
@@ -62,7 +62,7 @@ export class AppModule { }
         tooltipMessage="Select all / Deselect all" 
         selectAllViewLabel="All animal"
         (listSelected$)="getListSelected($event)">
-    </lib-mat-select-search-advanced>
+    </mat-select-search-advanced>
 ```
 
 **This code is just a sample**

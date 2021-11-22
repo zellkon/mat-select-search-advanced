@@ -3,11 +3,9 @@
 <p align="center">
 
 <img src="https://img.shields.io/badge/create%20by-zellkon-brightgreen" >
-
-<img src="https://img.shields.io/badge/version-0.1.7-blue">
 </p>
 
-_A This project made by the **[ZELLKON](https://zellkon.com)**._
+_This project made by  **[ZELLKON](https://zellkon.com)**._
 
 ---
 
@@ -18,7 +16,6 @@ _A This project made by the **[ZELLKON](https://zellkon.com)**._
 </p>
 
 ## [NPM Package](https://www.npmjs.com/package/mat-select-search-advanced)
-## [Base ngx-mat-select-search](https://www.npmjs.com/package/ngx-mat-select-search)
 
 
 
@@ -50,41 +47,31 @@ export class AppModule { }
 ```
 ### Use library in your component
 ```html
-<lib-mat-select-search-advanced 
-        [objects]="getObject()" indexKey="id" 
+<mat-select-search-advanced 
+        [objects]="array" indexKey="id" 
         [viewKey]="['name']" 
         [searchProperties]="['name', 'age']"
-        [initData] = "listId"
+        [initData] = "initArray"
         placeholderSearchLabel="Search by name" 
         label="List Animal" 
         messageErrorRequired="You need select some thing"
         noEntriesFoundLabel="Found nothing" 
         tooltipMessage="Select all / Deselect all" 
         selectAllViewLabel="All animal"
+        [required] = "true"
+        (optionSelect$)="getOptionSelected($event)"
         (listSelected$)="getListSelected($event)">
-    </lib-mat-select-search-advanced>
+    </mat-select-search-advanced>
 ```
 
 **This code is just a sample**
 
 ## Properties - Config Mat-select-search-advance
-### objects (this is your Observable array)
-#### Convert array to Observable array
+### objects and initData (this is your array and init array)
 ```js
-import { Observable, of } from 'rxjs';
-  getObject(){
-  return of(yourArray)
-}
+// if you wana change array
+this.array = newArray.slice();
 ```
-#### Accept Subject and RelaySubject or BehaviorSubject
-```js
-// if you need change value realtime just use Subject
-observableArray: Subject<any[]> = new ReplaySubject<any[]>(1);
-
-// change value observableArray
-observableArray.next(newData);
-```
-
 ### indexKey (this is your index your object, example: id)
 ```html
   indexKey="id" 
@@ -109,7 +96,7 @@ observableArray.next(newData);
 ```html
  placeholderSearchLabel="Search by name" 
 ```
-### initData (init data in edit mode, example: Observable value)
+### initData (init data in edit mode, example: id value)
 ```html
  [initData]="listId" 
 ```
@@ -141,5 +128,8 @@ observableArray.next(newData);
     console.log(result);
   }
 ```
-
+## appearance ('outline' | 'fill' | ...)
+```html
+ appearance="outline"
+```
 ## Same for other attributes

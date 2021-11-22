@@ -1,11 +1,20 @@
 {
   "name": "mat-select-search-advanced",
-  "version": "0.2.2",
+  "version": "0.3.2",
   "peerDependencies": {
     "@angular/common": "^12.2.0",
     "@angular/core": "^12.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  }
+  },
+  "keywords": [
+    "@angular/material",
+    "angular",
+    "mat-select-search",
+    "search",
+    "angular 12"
+  ],
+  "author": "Zellkon <zellkon@live.com> (https://zellkon.com/)",
+  "license": "MIT"
 }
